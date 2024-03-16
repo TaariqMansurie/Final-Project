@@ -1,0 +1,90 @@
+# import networkx as nx
+# import matplotlib.pyplot as plt
+
+# # Load Karate Club graph
+# karate_graph = nx.karate_club_graph()
+
+# # Example implementation of PageRank and HITS algorithms for stability analysis
+# def stability_analysis(graph):
+#     # Initialize dictionaries to store scores for all nodes
+#     page_rank_scores = {}
+#     hub_scores = {}
+#     authority_scores = {}
+
+#     # Run the algorithms for stability analysis for each node
+#     for node in graph.nodes:
+#         # Implement PageRank algorithm
+#         page_rank_scores[node] = nx.pagerank(graph)[node]
+
+#         # Implement HITS algorithm
+#         hub, authority = nx.hits(graph)
+#         hub_scores[node] = hub[node]
+#         authority_scores[node] = authority[node]
+
+#     # Plot stability analysis for all nodes
+#     plt.figure(figsize=(10, 5))
+#     plt.plot(page_rank_scores.values(), label="PageRank")
+#     plt.plot(hub_scores.values(), label="Hub")
+#     plt.plot(authority_scores.values(), label="Authority")
+#     plt.xlabel("Node")
+#     plt.ylabel("Score")
+#     plt.title("Stability Analysis for All Nodes")
+#     plt.legend()
+#     plt.grid(True)
+#     plt.show()
+
+# # Perform stability analysis for all nodes in the Karate Club graph
+# stability_analysis(karate_graph)
+
+import networkx as nx
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Load Zachary's Karate Club graph
+karate_graph = nx.karate_club_graph()
+
+# Print basic information about the graph
+print("Number of nodes:", karate_graph.number_of_nodes())
+print("Number of edges:", karate_graph.number_of_edges())
+
+# Example implementation of PageRank and HITS algorithms
+def compare_algorithms_for_all_nodes(graph):
+    # Run the algorithms for stability analysis for each node
+    num_iterations = 20
+    width = 0.25
+    for node in graph.nodes():
+        # Initialize lists to store scores for the current node
+        page_rank_scores = []
+        hub_scores = []
+        authority_scores = []
+
+        # Run the algorithms multiple times to measure stability
+        for _ in range(num_iterations):
+            # Implement PageRank algorithm
+            page_rank_scores.append(nx.pagerank(graph)[node])
+
+            # Implement HITS algorithm
+            hub, authority = nx.hits(graph)
+            hub_scores.append(hub[node])
+            authority_scores.append(authority[node])
+
+        # Generate x-axis values for each iteration
+        x = np.arange(1, num_iterations + 1) 
+
+        # Plot stability analysis for the current node
+        plt.figure(figsize=(10, 5))
+        plt.bar(x - width, page_rank_scores, width, label="PageRank")
+        plt.bar(x, hub_scores, width, label="Hub")
+        plt.bar(x + width, authority_scores, width, label="Authority")
+        plt.xlabel("Iteration")
+        plt.ylabel("Score")
+        plt.title(f"Stability Analysis for Node {node}")
+        plt.legend()
+        plt.grid(True)
+        plt.show()
+
+# Load the Karate Club graph
+graph = nx.karate_club_graph()
+
+# Compare algorithms for all nodes
+compare_algorithms_for_all_nodes(graph)
